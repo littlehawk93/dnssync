@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/littlehawk93/dnssync/config"
 	"github.com/spf13/cobra"
@@ -43,6 +44,10 @@ func init() {
 }
 
 func loadConfigurationFile() {
+	if strings.TrimSpace(configFile) == "" {
+		log.Fatal("no config file provided")
+	}
+
 	viper.SetConfigFile(configFile)
 
 	if err := viper.ReadInConfig(); err != nil {
