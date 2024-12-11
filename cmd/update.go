@@ -5,10 +5,8 @@ package cmd
 
 import (
 	"log"
-	"strings"
 
 	"github.com/littlehawk93/dnssync/icanhazip"
-	"github.com/littlehawk93/dnssync/provider"
 	"github.com/spf13/cobra"
 )
 
@@ -38,7 +36,7 @@ func init() {
 
 func runUpdate(cmd *cobra.Command, args []string) {
 
-	prov := getProvider(updateProvider)
+	prov := configuration.GetMatchingProvider(updateProvider)
 
 	if prov == nil {
 		log.Fatalf("invalid provider name '%s'", updateProvider)
@@ -59,14 +57,4 @@ func runUpdate(cmd *cobra.Command, args []string) {
 			log.Fatalf("failed to update domain '%s': %s", domain, err.Error())
 		}
 	}
-}
-
-func getProvider(provName string) provider.Provider {
-
-	provName = strings.TrimSpace(strings.ToLower(provName))
-
-	if provName == configuration.Cloudflare.GetName() {
-		return configuration.Cloudflare
-	}
-	return nil
 }
